@@ -1,10 +1,10 @@
 import socket
 import threading
 from string import ascii_lowercase, ascii_uppercase
-import random
+from random import shuffle, choice
 s = socket.socket()
-s.bind(("192.168.1.102", 42069))  #my own address and port
-s.listen(8)
+s.bind(("192.168.1.102", 42069))  # My own address and port
+s.listen(16)
 
 chars = list(ascii_lowercase) + list(ascii_uppercase) + [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
@@ -12,16 +12,16 @@ players = {}
 
 def genClientId():
     id = ""
-    random.shuffle(chars)
+    shuffle(chars)
     for i in range(1, 11):
-        id += str(random.choice(chars))
+        id += str(choice(chars))
     return id
 
 
 def msgHandler(senderid, msg):
     for id in players.keys():
-        if not players[id] == players[senderid]:
-            players[id].send(f"newPos={id},{msg}".encode())
+        if players[id] != players[senderid]:
+            players[id].send(f"newPos={senderid},{msg}".encode())
 
 
 def connHandler(conn, addrclient, clientid):
