@@ -22,7 +22,6 @@ def newClientTurtle(name):
     print(players[name])
 
 def msgHandler(msg):
-    print(msg)
     if msg.startswith("newClient="):
         msg = msg[10:]
         newClientTurtle(msg)

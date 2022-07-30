@@ -23,11 +23,13 @@ def msgHandler(senderid, msg):
         if players[id] != players[senderid]:
             players[id].send(f"newPos={senderid},{msg}".encode())
 
-
 def connHandler(conn, addrclient, clientid):
     for id in players.keys():
         if not id == clientid:
             players[id].send(("newClient=" + clientid).encode())
+    for id in players.keys():
+        if clientid != id:
+            conn.send(f"newClient={id}".encode())
     while True:
         msg = conn.recv(2048).decode()
         print(addrclient, msg)
